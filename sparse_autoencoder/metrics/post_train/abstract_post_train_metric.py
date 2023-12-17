@@ -13,11 +13,11 @@ from sparse_autoencoder.tensor_types import Axis
 class PostTrainMetricData:
     """Post Train metric data."""
 
-    input_activations: Float[Tensor, Axis.names(Axis.BATCH, Axis.INPUT_OUTPUT_FEATURE)]
+    input_activations: Float[Tensor, Axis.dims(Axis.BATCH, Axis.INPUT_OUTPUT_FEATURE)]
 
-    learned_activations: Float[Tensor, Axis.names(Axis.BATCH, Axis.LEARNT_FEATURE)]
+    learned_activations: Float[Tensor, Axis.dims(Axis.BATCH, Axis.LEARNT_FEATURE)]
 
-    decoded_activations: Float[Tensor, Axis.names(Axis.BATCH, Axis.INPUT_OUTPUT_FEATURE)]
+    decoded_activations: Float[Tensor, Axis.dims(Axis.BATCH, Axis.INPUT_OUTPUT_FEATURE)]
 
     model: Any
 
