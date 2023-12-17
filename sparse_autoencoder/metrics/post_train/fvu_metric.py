@@ -1,0 +1,44 @@
+"""fvu metric"""
+from abc import ABC, abstractmethod
+from dataclasses import dataclass
+from typing import Any
+
+from jaxtyping import Float
+from torch import Tensor
+
+from sparse_autoencoder.metrics.post_train.abstract_post_train_metric import (
+    AbstractPostTrainMetric,
+    PostTrainMetricData,
+)
+from sparse_autoencoder.tensor_types import Axis
+
+class FVUMetric(AbstractPostTrainMetric):
+    """Fraction Variance Unexplained Metric.
+
+    """
+
+    # def __init__(self, model):
+    #     self.model = model
+
+    @staticmethod
+    def fvu(
+        data: PostTrainMetricData,
+    ) -> Float[Tensor, Axis.BATCH]:
+        """Calculate fvu.
+
+        Example:
+
+        """
+        _, x_hat = data.model(data.input_activations)
+        residuals = (data.input_activations - x_hat).pow(2).mean()
+        total = (data.input_activations - data.input_activations.mean(dim=0)).pow(2).mean()
+        return residuals / total
+
+    def calculate(self, data: PostTrainMetricData) -> dict[str, Any]:
+        """Calculate the fvu for a training batch."""
+        fvu = self.fvu(data)
+
+        return {
+            "fvu": fvu,
+        }
+
