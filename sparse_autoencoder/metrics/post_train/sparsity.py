@@ -3,6 +3,7 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from typing import Any
 
+import torch
 from jaxtyping import Float
 from torch import Tensor
 
@@ -29,6 +30,8 @@ class SparsityMetric(AbstractPostTrainMetric):
         Example:
 
         """
+        device = 'cuda' if torch.cuda.is_available() else 'cpu'
+        data.model.to(device)
         coefficients, _ = data.model(data.input_activations)
         return (coefficients != 0).float().mean(dim=0).sum().item()
 

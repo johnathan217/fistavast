@@ -3,6 +3,7 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from typing import Any
 
+import torch
 from jaxtyping import Float
 from torch import Tensor
 
@@ -29,6 +30,9 @@ class FVUMetric(AbstractPostTrainMetric):
         Example:
 
         """
+        device = 'cuda' if torch.cuda.is_available() else 'cpu'
+        data.model.to(device)
+
         _, x_hat = data.model(data.input_activations)
         residuals = (data.input_activations - x_hat).pow(2).mean()
         total = (data.input_activations - data.input_activations.mean(dim=0)).pow(2).mean()
