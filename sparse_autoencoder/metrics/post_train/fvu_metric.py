@@ -31,11 +31,11 @@ class FVUMetric(AbstractPostTrainMetric):
 
         """
         device = 'cuda' if torch.cuda.is_available() else 'cpu'
-        data.model.to(device)
+        input_activations = data.input_activations.to(device)
 
-        _, x_hat = data.model(data.input_activations)
-        residuals = (data.input_activations - x_hat).pow(2).mean()
-        total = (data.input_activations - data.input_activations.mean(dim=0)).pow(2).mean()
+        _, x_hat = data.model(input_activations)
+        residuals = (input_activations - x_hat).pow(2).mean()
+        total = (input_activations - input_activations.mean(dim=0)).pow(2).mean()
         return residuals / total
 
     def calculate(self, data: PostTrainMetricData) -> dict[str, Any]:

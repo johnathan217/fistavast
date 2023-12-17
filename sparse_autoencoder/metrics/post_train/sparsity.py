@@ -31,8 +31,10 @@ class SparsityMetric(AbstractPostTrainMetric):
 
         """
         device = 'cuda' if torch.cuda.is_available() else 'cpu'
-        data.model.to(device)
-        coefficients, _ = data.model(data.input_activations)
+        input_activations = data.input_activations.to(device)
+
+
+        coefficients, _ = data.model(input_activations)
         return (coefficients != 0).float().mean(dim=0).sum().item()
 
     def calculate(self, data: PostTrainMetricData) -> dict[str, Any]:
