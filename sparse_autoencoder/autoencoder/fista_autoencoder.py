@@ -127,7 +127,7 @@ class FistaSparseAutoencoder(AbstractAutoencoder):
         """
         x = self._pre_encoder_bias(x)
         learned_activations = self._encoder(x)
-        learned_activations, _ = FISTA(x, self._decoder.weight.data, 0.03, 10, C=learned_activations)
+        learned_activations, _ = FISTA(x, self._decoder.weight.data, 0.03, 300, C=learned_activations)
         x = self._decoder(learned_activations)
         decoded_activations = self._post_decoder_bias(x)
         return learned_activations, decoded_activations
